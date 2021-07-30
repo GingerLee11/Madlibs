@@ -1,0 +1,3 @@
+This is an example. 
+The actual madlib will have a story and stuff. 
+Thanks for reading!
