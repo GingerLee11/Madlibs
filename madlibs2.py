@@ -19,8 +19,6 @@ path = pyip.inputFilepath(path_prompt)
 
 os.chdir(path)
 
-# C:\Users\Cleme\Practice_Code\Automate_The_Boring_Stuff\ATBS_side_projects
-
 # Prompts user for the number of teams competing
 num_of_teams = pyip.inputInt(team_num_prompt)
 
