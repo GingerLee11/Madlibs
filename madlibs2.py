@@ -3,10 +3,10 @@
 # add input anywhere any of the madlib words show up in the text
 
 import os
-from pathlib import Path
 import re
 import pyinputplus as pyip
 from datetime import datetime
+from madlib_words import madlib_regex
 
 # Example madlib
 text = 'The ADJECTIVE ANIMAL PAST-TENSE-VERB into the ADJECTIVE bar, and PAST-TENSE-VERB a(n) NOUN.'
@@ -15,9 +15,11 @@ path_prompt = 'Please input in the path where your madlibs are located:\n'
 team_num_prompt = 'Please input the number of teams:\n'
 
 # Asks users which path the matlibs are in
-path = pyip.inputFilepath(path_prompt)
+#path = pyip.inputFilepath(path_prompt)
+path = r'C:\Users\Cleme\Practice_Code\Automate_The_Boring_Stuff\ATBS_side_projects'
 
 os.chdir(path)
+
 
 # Prompts user for the number of teams competing
 num_of_teams = pyip.inputInt(team_num_prompt)
@@ -43,7 +45,7 @@ for team in range(num_of_teams):
         theme_prompt = 'Please choose from one of the following madlib themes:\n'
 
         # Asks user which madlib theme they want to use
-        theme = pyip.inputMenu(madlib_themes, theme_prompt)
+        theme = pyip.inputMenu(themes, theme_prompt)
 
         # Text file to be opened (should this be hard coded in or generated based off of the themes)
         filename = theme.lower() + '.txt'
@@ -53,45 +55,18 @@ for team in range(num_of_teams):
         try: 
             with open(filename, 'r', encoding="latin-1") as madlibs: 
                 read_madlibs = madlibs.read()
-            return read_madlibs
+            return (read_madlibs, theme)
 
         except FileNotFoundError:
             print('Sorry that theme is not available, please pick a different one.\n')
             return choosing_madlib_theme(madlib_themes)
 
-    madlibs_text = choosing_madlib_theme(madlib_themes)
+    madlibs_text, theme = choosing_madlib_theme(madlib_themes)
 
-    def madlib_generator(text_file):
+    def madlib_generator(text_file, regex_list):
 
-        # Define words that would be used in madlibs
-        madlib_words = [
-            'ADJECTIVE',
-            'NAME',
-            "CELEBRITY",
-            # The same matching problem with verbs is going to occur with 
-            # nouns and plural nouns
-            'PLURAL NOUN',
-            'NOUN',
-            'FOOD',
-            'ADVERB',
-            'PAST-TENSE-VERB',
-            '-ING-VERB',
-            # Verb still matches to the Past Tense Verbs
-            # When spaces are used to specify the verb match then the spaces are 
-            # matched and there are not spaces when printed
-            'PRESENT-TENSE-VERB',
-            'ANIMAL',
-            'EXCLAMATION',
-            'SILLY WORD',
-            'LOCATION',
-            'CITY',
-            'DAY OF THE WEEK',
-            'TIME',
-            'NUMBER',
-            'BODY PART (PLURAL)'
-            'BODY PART',
-
-                ]
+        # Define regex expressions that would be used in madlibs
+        madlib_words = regex_list
 
         vowels = (
             'A', 'I', 'E', 'O', 'U'
@@ -101,7 +76,7 @@ for team in range(num_of_teams):
         regex_matches = {}
         sub_text = text_file
         for word in madlib_words:
-            regex = re.compile(word)
+            regex = re.compile(str(word))
             regex_matches[regex] = regex.findall(sub_text)
         # Loop through the dictionary so that the user can input their values for the madlib words
         for regex, matches in regex_matches.items():
@@ -152,4 +127,4 @@ for team in range(num_of_teams):
     #madlib_generator(text)
 
     # Takes in text files and returns madlibs  
-    madlib_generator(madlibs_text)
+    madlib_generator(madlibs_text, madlib_regex)

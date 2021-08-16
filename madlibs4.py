@@ -3,11 +3,16 @@
 # a list of madlib words to an excel file for users to fill out before it is 
 # read back into python
 
+# I'll probably need to write one function that creates the excel files with all
+# the words and another that reads in the user input
+
 import os
 import re
 import pyinputplus as pyip
 import pandas as pd
 import openpyxl
+from madlib_words import madlib_regex
+
 
 # Example madlib
 text = 'The ADJECTIVE ANIMAL PAST-TENSE-VERB into the ADJECTIVE bar, and PAST-TENSE-VERB a(n) NOUN.'
@@ -17,13 +22,16 @@ team_num_prompt = 'Please input the number of teams:\n'
 
 # Asks users which path the matlibs are in
 #path = pyip.inputFilepath(path_prompt)
-path = 'put your path here'
+path = r'C:\Users\Cleme\Practice_Code\Automate_The_Boring_Stuff\ATBS_side_projects'
 
 os.chdir(path)
 
 
 # Prompts user for the number of teams competing
 num_of_teams = pyip.inputInt(team_num_prompt)
+
+# TODO: Write several madlibs based on different themes or different stories
+# Bonus: Write one madlib in Japanese!
 
 # Loop through the whole madlib game for each team
 for team in range(num_of_teams):
@@ -61,37 +69,10 @@ for team in range(num_of_teams):
 
     madlibs_text, theme = choosing_madlib_theme(madlib_themes)
 
-    def madlib_generator(text_file):
+    def madlib_generator(text_file, regex_list):
 
-        # Define words that would be used in madlibs
-        madlib_words = [
-            'ADJECTIVE',
-            "FRIEND'S NAME",
-            r"(?<!FRIEND'S\s)NAME",
-            "CELEBRITY",
-            'NOUN \(PLURAL\)',
-            r'NOUN(?!\s[(])',
-            'FOOD',
-            'ADVERB',
-            'PAST TENSE VERB',
-            'VERB ENDING IN ING',
-            'PRESENT TENSE VERB',
-            'ANIMAL',
-            'EXCLAMATION',
-            'SILLY WORD',
-            'LOCATION',
-            'CITY',
-            'DAY OF THE WEEK',
-            'TIME',
-            'NUMBER',
-            'BODY PART \(PLURAL\)',
-            r'BODY PART(?!\s[(])',
-
-                ]
-
-        vowels = (
-            'A', 'I', 'E', 'O', 'U'
-                )
+        # Import defined of words that will be used in madlibs
+        madlib_words = regex_list
 
         # Create a dictionary that has the regex as keys and the matches as values
         regex_matches = {}
@@ -133,6 +114,6 @@ for team in range(num_of_teams):
         sheet.column_dimensions['A'].width = 20
         sheet.column_dimensions['B'].width = 20
         wb.save(f'Madlibs_theme_{theme}_team_{team + 1}.xlsx')
-                            
+        wb.close()                
 
-    madlib_generator(madlibs_text)
+    madlib_generator(madlibs_text, madlib_regex)
