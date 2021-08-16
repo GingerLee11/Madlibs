@@ -3,9 +3,6 @@
 # a list of madlib words to an excel file for users to fill out before it is 
 # read back into python
 
-# I'll probably need to write one function that creates the excel files with all
-# the words and another that reads in the user input
-
 import os
 import re
 import pyinputplus as pyip
@@ -20,16 +17,13 @@ team_num_prompt = 'Please input the number of teams:\n'
 
 # Asks users which path the matlibs are in
 #path = pyip.inputFilepath(path_prompt)
-path = r'C:\Users\Cleme\Practice_Code\Automate_The_Boring_Stuff\ATBS_side_projects'
+path = 'put your path here'
 
 os.chdir(path)
 
 
 # Prompts user for the number of teams competing
 num_of_teams = pyip.inputInt(team_num_prompt)
-
-# TODO: Write several madlibs based on different themes or different stories
-# Bonus: Write one madlib in Japanese!
 
 # Loop through the whole madlib game for each team
 for team in range(num_of_teams):
@@ -75,8 +69,6 @@ for team in range(num_of_teams):
             "FRIEND'S NAME",
             r"(?<!FRIEND'S\s)NAME",
             "CELEBRITY",
-            # The same matching problem with verbs is going to occur with 
-            # nouns and plural nouns
             'NOUN \(PLURAL\)',
             r'NOUN(?!\s[(])',
             'FOOD',
